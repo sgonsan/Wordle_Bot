@@ -1,6 +1,9 @@
+#include <curl/curl.h>
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -8,29 +11,54 @@
 
 using json = nlohmann::json;
 
-// Function declarations
-json loadDictionary(const std::string &filename);
-std::vector<std::string> filterWords(const std::vector<std::string> &words,
-                                     const std::string &guess,
-                                     const std::string &feedback);
-bool validateFeedback(const std::string &feedback, int wordLength);
-void playGame(const json &dictionary);
+// Callback function for cURL to store response
+size_t WriteCallback(void *contents, size_t size, size_t nmemb,
+                     std::string *s) {
+  size_t newLength = size * nmemb;
+  try {
+    s->append((char *)contents, newLength);
+  } catch (std::bad_alloc &e) {
+    // Handle memory problem
+    return 0;
+  }
+  return newLength;
+}
 
-int main() {
-  // Load dictionary
-  std::string filename = "dictionary.json";
-  json dictionary = loadDictionary(filename);
+// Function to fetch words from API
+std::vector<std::string> fetchWordsFromAPI(int wordLength) {
+  const std::string apiUrl =
+      "http://localhost:5000/words?length=" + std::to_string(wordLength);
+  std::string response;
 
-  if (dictionary.empty()) {
-    std::cerr << "Error: Failed to load dictionary from " << filename
-              << std::endl;
-    return 1;
+  CURL *curl;
+  CURLcode res;
+
+  curl = curl_easy_init();
+  if (curl) {
+    curl_easy_setopt(curl, CURLOPT_URL, apiUrl.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+    res = curl_easy_perform(curl);
+    if (res != CURLE_OK) {
+      std::cerr << "cURL error: " << curl_easy_strerror(res) << std::endl;
+    }
+
+    curl_easy_cleanup(curl);
+  } else {
+    std::cerr << "Failed to initialize cURL." << std::endl;
   }
 
-  // Start the game
-  playGame(dictionary);
+  // Parse JSON response
+  std::vector<std::string> words;
+  try {
+    json jsonResponse = json::parse(response);
+    words = jsonResponse.get<std::vector<std::string>>();
+  } catch (const json::parse_error &e) {
+    std::cerr << "Error parsing JSON response: " << e.what() << std::endl;
+  }
 
-  return 0;
+  return words;
 }
 
 // Function to load dictionary from a JSON file
@@ -54,55 +82,66 @@ json loadDictionary(const std::string &filename) {
 }
 
 // Function to filter words based on the feedback provided by the user
-std::vector<std::string> filterWords(const std::vector<std::string> &words,
-                                     const std::string &guess,
-                                     const std::string &feedback) {
+std::vector<std::string> filterWords(
+    const std::vector<std::string> &possibleWords, const std::string &guess,
+    const std::string &feedback) {
   std::vector<std::string> filteredWords;
 
-  for (const auto &word : words) {
-    bool valid = true;  // Assume the word is valid
-    std::vector<bool> used(
-        word.size(),
-        false);  // Track positions already validated in the candidate word
+  for (const auto &word : possibleWords) {
+    if (word.length() != guess.length()) {
+      std::cerr << "Skipping word '" << word
+                << "' because its length doesn't match the guess length."
+                << std::endl;
+      continue;
+    }
 
-    for (size_t i = 0; i < feedback.size(); ++i) {
-      char fb = feedback[i];      // Feedback actual (B, C, M)
-      char guessChar = guess[i];  // Letra en el guess actual
-      char wordChar =
-          word[i];  // Letra de la palabra candidata en la misma posición
+    bool match = true;
+    std::vector<bool> used(word.length(), false);
 
-      if (fb == 'B') {
-        // 'B': La letra está en la posición correcta
-        if (wordChar != guessChar) {
-          valid = false;  // Si no coincide exactamente, la palabra no es válida
-          break;
-        }
-        used[i] = true;  // Marca esta posición como utilizada
-      } else if (fb == 'C') {
-        // 'C': La letra está en la palabra pero en otra posición
+    // First pass: check for correct letters in correct positions (B)
+    for (size_t i = 0; i < word.length(); ++i) {
+      if (feedback[i] == 'B' && word[i] != guess[i]) {
+        match = false;
+        break;
+      }
+      if (feedback[i] == 'B') {
+        used[i] = true;
+      }
+    }
+    if (!match) continue;
+
+    // Second pass: check for correct letters in wrong positions (C)
+    for (size_t i = 0; i < word.length(); ++i) {
+      if (feedback[i] == 'C') {
         bool found = false;
-        for (size_t j = 0; j < word.size(); ++j) {
-          if (!used[j] && word[j] == guessChar && j != i) {
-            found = true;    // Find the letter in a different valid position
-            used[j] = true;  // Mark this position as used
+        for (size_t j = 0; j < word.length(); ++j) {
+          if (!used[j] && word[j] == guess[i] && i != j) {
+            found = true;
+            used[j] = true;
             break;
           }
         }
         if (!found) {
-          valid = false;  // If not found, the word is not valid
-          break;
-        }
-      } else if (fb == 'M') {
-        // 'M': La letra no debe estar en la palabra
-        if (word.find(guessChar) != std::string::npos) {
-          valid = false;  // If the letter is in any position, it is not valid
+          match = false;
           break;
         }
       }
     }
+    if (!match) continue;
 
-    if (valid) {
-      filteredWords.push_back(word);  // Add the word if it passed all checks
+    // Third pass: check for incorrect letters (M)
+    for (size_t i = 0; i < word.length(); ++i) {
+      if (feedback[i] == 'M') {
+        for (size_t j = 0; j < word.length(); ++j) {
+          if (word[j] == guess[i] && !used[j]) {
+            match = false;
+            break;
+          }
+        }
+      }
+    }
+    if (match) {
+      filteredWords.push_back(word);
     }
   }
 
@@ -111,7 +150,7 @@ std::vector<std::string> filterWords(const std::vector<std::string> &words,
 
 // Function to validate the feedback std::string
 bool validateFeedback(const std::string &feedback, int wordLength) {
-  if (feedback.size() != wordLength) {
+  if (int(feedback.size()) != wordLength) {
     std::cerr << "Error: Feedback length must match the word length."
               << std::endl;
     return false;
@@ -128,34 +167,109 @@ bool validateFeedback(const std::string &feedback, int wordLength) {
   return true;
 }
 
-// Main game function
-void playGame(const json &dictionary) {
+// Remove accents from a word
+std::string removeAccents(const std::string &word) {
+  std::unordered_map<char, char> accents = {
+      {'á', 'a'}, {'é', 'e'}, {'í', 'i'}, {'ó', 'o'}, {'ú', 'u'},
+      {'Á', 'A'}, {'É', 'E'}, {'Í', 'I'}, {'Ó', 'O'}, {'Ú', 'U'}};
+
+  std::string normalized = word;
+  for (auto &c : normalized) {
+    if (accents.count(c)) {
+      c = accents[c];
+    }
+  }
+  return normalized;
+}
+
+// Select the best guess based on the feedback
+std::string selectBestGuess(const std::vector<std::string> &possibleWords,
+                            bool isFirstGuess) {
+  if (possibleWords.size() == 1) {
+    return possibleWords[0];  // Si queda una palabra, la seleccionamos.
+  }
+
+  if (isFirstGuess) {
+    // Seleccionar palabra inicial basada en la mayor cantidad de vocales
+    std::string bestWord;
+    size_t maxVowels = 0;
+
+    for (const auto &word : possibleWords) {
+      std::set<char> vowels;
+      for (char c : word) {
+        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+          vowels.insert(c);
+        }
+      }
+      if (vowels.size() > maxVowels) {
+        maxVowels = vowels.size();
+        bestWord = word;
+      }
+    }
+    return bestWord;
+  }
+
+  // Estrategia general: Priorizar letras frecuentes
+  std::map<char, int> letterFrequency;
+  for (const auto &word : possibleWords) {
+    for (char c : word) {
+      letterFrequency[c]++;
+    }
+  }
+
+  std::string bestGuess;
+  int maxScore = -1;
+
+  for (const auto &word : possibleWords) {
+    int score = 0;
+    std::set<char> uniqueLetters(word.begin(), word.end());
+
+    for (char c : uniqueLetters) {
+      score += letterFrequency[c];
+    }
+
+    if (score > maxScore) {
+      maxScore = score;
+      bestGuess = word;
+    }
+  }
+
+  bestGuess = removeAccents(bestGuess);
+
+  return bestGuess;
+}
+
+// Function to play the game
+void playGame() {
   int wordLength;
   std::cout << "Enter the word length: ";
   std::cin >> wordLength;
 
-  if (dictionary.find(std::to_string(wordLength)) == dictionary.end()) {
-    std::cout << "No words of length " << wordLength
-              << " found in the dictionary." << std::endl;
+  std::vector<std::string> possibleWords = fetchWordsFromAPI(wordLength);
+
+  if (possibleWords.empty()) {
+    std::cerr << "No words of length " << wordLength
+              << " available from the API." << std::endl;
     return;
   }
 
-  std::vector<std::string> words =
-      dictionary[std::to_string(wordLength)].get<std::vector<std::string>>();
-  std::vector<std::string> possibleWords = words;
+  std::cout << "Total possible words: " << possibleWords.size() << std::endl;
 
   int attempts = 0;
   std::string feedback;
+  bool isFirstGuess = true;
 
   while (true) {
     if (possibleWords.empty()) {
-      std::cout << "No possible words match the feedback given. Exiting..."
+      std::cerr << "No possible words match the feedback given. Exiting..."
                 << std::endl;
       break;
     }
 
-    // Select the first word as the guess (can be optimized)
-    std::string guess = (attempts == 0) ? "caida" : possibleWords[0];
+    // Seleccionar la mejor palabra
+    std::string guess = selectBestGuess(possibleWords, isFirstGuess);
+    isFirstGuess = false;
+
     std::cout << "Bot guesses: " << guess << std::endl;
 
     std::cout
@@ -163,7 +277,6 @@ void playGame(const json &dictionary) {
            "M for incorrect): ";
     std::cin >> feedback;
 
-    // Validate feedback
     if (!validateFeedback(feedback, wordLength)) {
       continue;
     }
@@ -176,7 +289,16 @@ void playGame(const json &dictionary) {
       break;
     }
 
-    // Filter words based on feedback
     possibleWords = filterWords(possibleWords, guess, feedback);
+
+    std::cout << "Remaining possible words: " << possibleWords.size()
+              << std::endl;
   }
+}
+
+int main() {
+  // Start the game
+  playGame();
+
+  return 0;
 }

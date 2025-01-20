@@ -1,61 +1,45 @@
+import os
+import re
+from collections import Counter
 import json
-import unicodedata
 
-# Ruta del archivo de entrada y salida
-input_file = "spanish_words.txt"  # Archivo de palabras en español, una por línea
-output_file = "dictionary.json"
+# Configuración
 
+# Archivo de salida
+output_file = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary.json"
 
-def remove_accents(word):
-    """
-    Elimina los acentos de una palabra usando unicodedata.
-    """
-    return "".join(
-        char
-        for char in unicodedata.normalize("NFD", word)
-        if unicodedata.category(char) != "Mn"
-    )
+# Carpeta donde están los textos
+text_folder = "/home/sgonsan/Projects/Wordle_Bot/texts"
 
 
-def create_dictionary(input_file):
-    """
-    Crea un diccionario organizado por longitud de palabras y elimina duplicados.
-    """
-    word_dict = {}
-    try:
-        with open(input_file, "r", encoding="utf-8") as file:
-            for line in file:
-                word = line.strip().lower()
-                word = remove_accents(word)  # Elimina los acentos
-                length = len(word)
-                if length not in word_dict:
-                    word_dict[length] = []
-                word_dict[length].append(word)
-
-        # Eliminar duplicados y ordenar las palabras por longitud
-        for length in word_dict:
-            word_dict[length] = sorted(list(set(word_dict[length])))
-
-        # Ordenar el diccionario por longitud de palabras
-        word_dict = dict(sorted(word_dict.items()))
-
-    except FileNotFoundError:
-        print(f"Error: {input_file} no encontrado.")
-        return None
-
-    return word_dict
+# Función para limpiar y normalizar texto
+def clean_text(text):
+    # Eliminar todo excepto letras y espacios
+    text = re.sub(r"[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]", " ", text)
+    # Reemplazar múltiples espacios por uno solo
+    text = re.sub(r"\s+", " ", text)
+    # Convertir a minúsculas
+    text = text.lower()
+    # Eliminar espacios iniciales y finales
+    return text.strip()
 
 
-def save_dictionary(dictionary, output_file):
-    """
-    Guarda el diccionario como un archivo JSON.
-    """
-    with open(output_file, "w", encoding="utf-8") as file:
-        json.dump(dictionary, file, ensure_ascii=False, indent=4)
+# Cargar y procesar textos
+word_counter = Counter()
+for filename in os.listdir(text_folder):
+    if filename.endswith(".txt"):
+        with open(os.path.join(text_folder, filename), "r", encoding="utf-8") as file:
+            text = file.read()
+            text = clean_text(text)
+            words = text.split()
+            word_counter.update(words)
 
+# Crear diccionario ordenado por frecuencia
+sorted_words = word_counter.most_common()
+dictionary = {word: count for word, count in sorted_words}
 
-# Crear y guardar el diccionario
-word_dict = create_dictionary(input_file)
-if word_dict:
-    save_dictionary(word_dict, output_file)
-    print(f"Diccionario generado y guardado en {output_file}")
+# Guardar como JSON
+with open(output_file, "w", encoding="utf-8") as file:
+    json.dump(dictionary, file, ensure_ascii=False, indent=4)
+
+print(f"Diccionario generado con {len(dictionary)} palabras.")
