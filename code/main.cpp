@@ -257,6 +257,10 @@ void playGame() {
            "M for incorrect): ";
     std::cin >> feedback;
 
+    // Convert feedback to uppercase
+    std::transform(feedback.begin(), feedback.end(), feedback.begin(),
+                   ::toupper);
+
     if (!validateFeedback(feedback, wordLength)) {
       continue;
     }
