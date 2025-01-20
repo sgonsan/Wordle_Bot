@@ -6,7 +6,8 @@ import json
 # Configuración
 
 # Archivo de salida
-output_file = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary.json"
+json_file = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary.json"
+txt_file = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary.txt"
 
 # Carpeta donde están los textos
 text_folder = "/home/sgonsan/Projects/Wordle_Bot/texts"
@@ -39,7 +40,12 @@ sorted_words = word_counter.most_common()
 dictionary = {word: count for word, count in sorted_words}
 
 # Guardar como JSON
-with open(output_file, "w", encoding="utf-8") as file:
+with open(json_file, "w", encoding="utf-8") as file:
     json.dump(dictionary, file, ensure_ascii=False, indent=4)
+
+# Guardar como archivo de texto
+with open(txt_file, "w", encoding="utf-8") as file:
+    for word, _ in sorted_words:
+        file.write(f"{word}\n")
 
 print(f"Diccionario generado con {len(dictionary)} palabras.")

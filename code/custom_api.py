@@ -1,14 +1,13 @@
+# filepath: /home/sgonsan/Projects/Wordle_Bot/code/custom_api.py
 from flask import Flask, jsonify, request
-import json
-import random
 
 app = Flask(__name__)
 
-# Cargar el diccionario generado
-with open(
-    "/home/sgonsan/Projects/Wordle_Bot/data/dictionary.json", "r", encoding="utf-8"
-) as file:
-    dictionary = json.load(file)
+# Cargar palabras desde un archivo
+# words_file_path = "/home/sgonsan/Projects/Wordle_Bot/data/spanish_words.txt"
+words_file_path = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary.txt"
+with open(words_file_path, "r", encoding="utf-8") as file:
+    words = [line.strip() for line in file.readlines()]
 
 
 # Endpoint para obtener palabras por longitud
@@ -19,36 +18,23 @@ def get_words():
         return jsonify({"error": "Please provide a word length"}), 400
 
     # Filtrar palabras por longitud
-    filtered_words = [word for word in dictionary.keys() if len(word) == length]
+    filtered_words = [word for word in words if len(word) == length]
 
-    # Si no hay palabras disponibles
-    if not filtered_words:
-        return jsonify({"error": f"No words of length {length} available."}), 404
-
-    # Elegir un subconjunto limitado de palabras
-    max_words = 50  # Número máximo de palabras por solicitud
-    selected_words = random.sample(filtered_words, min(len(filtered_words), max_words))
-
-    return jsonify(selected_words)
-
-
-# Endpoint para obtener palabras más frecuentes
-@app.route("/words/frequent", methods=["GET"])
-def get_frequent_words():
-    length = request.args.get("length", type=int)
-    if not length:
-        return jsonify({"error": "Please provide a word length"}), 400
-
-    # Filtrar palabras por longitud
+    # Quitar las tildes de las palabras
     filtered_words = [
-        (word, count) for word, count in dictionary.items() if len(word) == length
+        word.replace("á", "a")
+        .replace("é", "e")
+        .replace("í", "i")
+        .replace("ó", "o")
+        .replace("ú", "u")
+        for word in filtered_words
     ]
 
-    # Ordenar por frecuencia y limitar el número de palabras
-    filtered_words.sort(key=lambda x: x[1], reverse=True)
-    top_words = [word for word, count in filtered_words[:10]]  # Las 10 más frecuentes
+    if not filtered_words:
+        return jsonify({"error": "No words found"}), 404
 
-    return jsonify(top_words)
+    # Devolver un subconjunto limitado para eficiencia
+    return jsonify(filtered_words)
 
 
 if __name__ == "__main__":

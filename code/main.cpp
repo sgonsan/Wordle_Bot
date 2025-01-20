@@ -61,26 +61,6 @@ std::vector<std::string> fetchWordsFromAPI(int wordLength) {
   return words;
 }
 
-// Function to load dictionary from a JSON file
-json loadDictionary(const std::string &filename) {
-  std::ifstream file(filename);
-  if (!file.is_open()) {
-    std::cerr << "Error: Unable to open dictionary file." << std::endl;
-    return {};
-  }
-
-  json dictionary;
-  try {
-    file >> dictionary;
-  } catch (const json::parse_error &e) {
-    std::cerr << "Error: Failed to parse dictionary JSON. " << e.what()
-              << std::endl;
-    return {};
-  }
-
-  return dictionary;
-}
-
 // Function to filter words based on the feedback provided by the user
 std::vector<std::string> filterWords(
     const std::vector<std::string> &possibleWords, const std::string &guess,
