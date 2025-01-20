@@ -60,32 +60,49 @@ std::vector<std::string> filterWords(const std::vector<std::string> &words,
   std::vector<std::string> filteredWords;
 
   for (const auto &word : words) {
-    bool valid = true;
+    bool valid = true;  // Assume the word is valid
+    std::vector<bool> used(
+        word.size(),
+        false);  // Track positions already validated in the candidate word
 
     for (size_t i = 0; i < feedback.size(); ++i) {
-      char fb = feedback[i];
-      char ch = guess[i];
+      char fb = feedback[i];      // Feedback actual (B, C, M)
+      char guessChar = guess[i];  // Letra en el guess actual
+      char wordChar =
+          word[i];  // Letra de la palabra candidata en la misma posición
 
-      if (fb == 'B' && word[i] != ch) {  // 'B' -> Correct letter and position
-        valid = false;
-        break;
-      } else if (fb == 'C' &&
-                 (word[i] == ch ||
-                  word.find(ch) ==
-                      std::string::npos)) {  // 'C' -> Correct letter, wrong
-                                             // position
-        valid = false;
-        break;
-      } else if (fb == 'M' &&
-                 word.find(ch) !=
-                     std::string::npos) {  // 'M' -> Incorrect letter
-        valid = false;
-        break;
+      if (fb == 'B') {
+        // 'B': La letra está en la posición correcta
+        if (wordChar != guessChar) {
+          valid = false;  // Si no coincide exactamente, la palabra no es válida
+          break;
+        }
+        used[i] = true;  // Marca esta posición como utilizada
+      } else if (fb == 'C') {
+        // 'C': La letra está en la palabra pero en otra posición
+        bool found = false;
+        for (size_t j = 0; j < word.size(); ++j) {
+          if (!used[j] && word[j] == guessChar && j != i) {
+            found = true;    // Find the letter in a different valid position
+            used[j] = true;  // Mark this position as used
+            break;
+          }
+        }
+        if (!found) {
+          valid = false;  // If not found, the word is not valid
+          break;
+        }
+      } else if (fb == 'M') {
+        // 'M': La letra no debe estar en la palabra
+        if (word.find(guessChar) != std::string::npos) {
+          valid = false;  // If the letter is in any position, it is not valid
+          break;
+        }
       }
     }
 
     if (valid) {
-      filteredWords.push_back(word);
+      filteredWords.push_back(word);  // Add the word if it passed all checks
     }
   }
 
@@ -138,7 +155,7 @@ void playGame(const json &dictionary) {
     }
 
     // Select the first word as the guess (can be optimized)
-    std::string guess = possibleWords.front();
+    std::string guess = (attempts == 0) ? "caida" : possibleWords[0];
     std::cout << "Bot guesses: " << guess << std::endl;
 
     std::cout
