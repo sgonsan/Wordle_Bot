@@ -16,7 +16,7 @@ text_folder = "/home/sgonsan/Projects/Wordle_Bot/texts"
 # Función para limpiar y normalizar texto
 def clean_text(text):
     # Eliminar todo excepto letras y espacios
-    text = re.sub(r"[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]", " ", text)
+    text = re.sub(r"[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]", "", text)
     # Reemplazar múltiples espacios por uno solo
     text = re.sub(r"\s+", " ", text)
     # Convertir a minúsculas
