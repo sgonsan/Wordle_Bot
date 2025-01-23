@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['readme_0',['README',['../md_README.html',1,'']]]
+  ['bot_0',['Wordle Bot',['../md_README.html',1,'']]]
 ];

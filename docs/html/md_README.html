@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tetris: README</title>
+<title>Tetris: Wordle Bot</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -84,10 +84,50 @@ $(function(){ initResizable(false); });
 </div><!-- top -->
 <div id="doc-content">
 <div><div class="header">
-  <div class="headertitle"><div class="title">README</div></div>
+  <div class="headertitle"><div class="title">Wordle Bot</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"></div></div><!-- contents -->
+<div class="textblock"><p><a class="anchor" id="autotoc_md0"></a></p>
+<p>This is a terminal-based bot that helps you play Wordle. It is written in c++ and uses a trie data structure to store the dictionary. The bot uses a simple algorithm to guess the word based on the feedback given by the user. In addition, there is two programs in python that can be used to generate the dictionary and launch the api server to play the game.</p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+How to use</h1>
+<h2><a class="anchor" id="autotoc_md2"></a>
+C++ bot</h2>
+<p>To use the bot, you need to compile the source code. You can do this by running the following command:</p>
+<div class="fragment"><div class="line">g++ -o wordle_bot code/main.cpp</div>
+</div><!-- fragment --><p>Then, you can run the bot by executing the following command:</p>
+<div class="fragment"><div class="line">./wordle_bot</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md3"></a>
+Python dictionary generator</h2>
+<p>To generate the dictionary, you need to run the following command:</p>
+<div class="fragment"><div class="line">python3 code/generate_dictionary.py</div>
+</div><!-- fragment --><p>This will generate two files: <code>dictionary.txt</code> and <code>dictionary.json</code>. The first file contains the list of words in the dictionary, and the second file contains the dictionary in json format.</p>
+<h2><a class="anchor" id="autotoc_md4"></a>
+Python API server</h2>
+<p>To launch the api server, you need to run the following command:</p>
+<div class="fragment"><div class="line">python3 code/custom_api.py</div>
+</div><!-- fragment --><p>This will launch the api server on <code><a href="http://localhost:5000">http://localhost:5000</a></code>. You can use this server to play the game using the bot.</p>
+<h1><a class="anchor" id="autotoc_md5"></a>
+How to play</h1>
+<p>To play the game, you need to provide the bot with the feedback for each guess. The feedback should be in the format <code>XXXXX</code>, where <code>X</code> is one of the following characters:</p>
+<ul>
+<li><code>B</code>: The letter is in the word and in the correct position.</li>
+<li><code>C</code>: The letter is in the word but in the wrong position.</li>
+<li><code>M</code>: The letter is not in the word.</li>
+</ul>
+<p>For example, if the word is <code>apple</code> and the guess is <code>apple</code>, the feedback should be <code>BBBBB</code>. If the guess is <code>peach</code>, the feedback should be <code>BCMMM</code>.</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+How it works</h1>
+<p>The bot uses a simple algorithm to guess the word based on the feedback given by the user. The algorithm works as follows:</p>
+<ol type="1">
+<li>The bot starts by guessing the word <code>apple</code>.</li>
+<li>The user provides feedback for the guess.</li>
+<li>The bot uses the feedback to eliminate words from the dictionary that do not match the feedback.</li>
+<li>The bot generates a new guess based on the remaining words in the dictionary.</li>
+<li>Steps 2-4 are repeated until the bot guesses the word.</li>
+</ol>
+<p>The bot uses a trie data structure to store the dictionary. This allows the bot to efficiently search for words that match the feedback. </p>
+</div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

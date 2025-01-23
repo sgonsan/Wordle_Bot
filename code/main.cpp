@@ -61,26 +61,45 @@ std::vector<std::string> fetchWordsFromAPI(int wordLength) {
   return words;
 }
 
+// Remove accents from a word
+std::string removeAccents(const std::string &word) {
+  std::unordered_map<char, char> accents = {
+      {'á', 'a'}, {'é', 'e'}, {'í', 'i'}, {'ó', 'o'}, {'ú', 'u'}, {'Á', 'A'},
+      {'É', 'E'}, {'Í', 'I'}, {'Ó', 'O'}, {'Ú', 'U'}, {'ü', 'u'}, {'Ü', 'U'}};
+  std::string result = word;
+  for (char ch : word) {
+    if (accents.find(ch) != accents.end()) {
+      result = result.replace(result.find(ch), 1, 1, accents[ch]);
+    }
+  }
+  return result;
+}
+
 // Function to filter words based on the feedback provided by the user
 std::vector<std::string> filterWords(
     const std::vector<std::string> &possibleWords, const std::string &guess,
     const std::string &feedback) {
   std::vector<std::string> filteredWords;
+  std::string normalizedGuess = removeAccents(guess);
 
   for (const auto &word : possibleWords) {
-    if (word.length() != guess.length()) {
-      std::cerr << "Skipping word '" << word
-                << "' because its length doesn't match the guess length."
-                << std::endl;
+    std::string normalizedWord = removeAccents(word);
+
+    if (normalizedWord.length() != guess.length() ||
+        feedback.length() != guess.length()) {
+      std::cerr << "Skipping '" << normalizedWord
+                << "' because the word length (" << normalizedWord.length()
+                << ") does not " << "match the guess length (" << guess.length()
+                << ")." << std::endl;
       continue;
     }
 
     bool match = true;
-    std::vector<bool> used(word.length(), false);
+    std::vector<bool> used(normalizedWord.length(), false);
 
     // First pass: check for correct letters in correct positions (B)
-    for (size_t i = 0; i < word.length(); ++i) {
-      if (feedback[i] == 'B' && word[i] != guess[i]) {
+    for (size_t i = 0; i < normalizedWord.length(); ++i) {
+      if (feedback[i] == 'B' && normalizedWord[i] != guess[i]) {
         match = false;
         break;
       }
@@ -91,11 +110,11 @@ std::vector<std::string> filterWords(
     if (!match) continue;
 
     // Second pass: check for correct letters in wrong positions (C)
-    for (size_t i = 0; i < word.length(); ++i) {
+    for (size_t i = 0; i < normalizedWord.length(); ++i) {
       if (feedback[i] == 'C') {
         bool found = false;
-        for (size_t j = 0; j < word.length(); ++j) {
-          if (!used[j] && word[j] == guess[i] && i != j) {
+        for (size_t j = 0; j < normalizedWord.length(); ++j) {
+          if (!used[j] && normalizedWord[j] == guess[i] && i != j) {
             found = true;
             used[j] = true;
             break;
@@ -110,10 +129,10 @@ std::vector<std::string> filterWords(
     if (!match) continue;
 
     // Third pass: check for incorrect letters (M)
-    for (size_t i = 0; i < word.length(); ++i) {
+    for (size_t i = 0; i < normalizedWord.length(); ++i) {
       if (feedback[i] == 'M') {
-        for (size_t j = 0; j < word.length(); ++j) {
-          if (word[j] == guess[i] && !used[j]) {
+        for (size_t j = 0; j < normalizedWord.length(); ++j) {
+          if (normalizedWord[j] == guess[i] && !used[j]) {
             match = false;
             break;
           }
@@ -121,10 +140,9 @@ std::vector<std::string> filterWords(
       }
     }
     if (match) {
-      filteredWords.push_back(word);
+      filteredWords.push_back(normalizedWord);
     }
   }
-
   return filteredWords;
 }
 
@@ -147,30 +165,15 @@ bool validateFeedback(const std::string &feedback, int wordLength) {
   return true;
 }
 
-// Remove accents from a word
-std::string removeAccents(const std::string &word) {
-  std::unordered_map<char, char> accents = {
-      {'á', 'a'}, {'é', 'e'}, {'í', 'i'}, {'ó', 'o'}, {'ú', 'u'},
-      {'Á', 'A'}, {'É', 'E'}, {'Í', 'I'}, {'Ó', 'O'}, {'Ú', 'U'}};
-
-  std::string normalized = word;
-  for (auto &c : normalized) {
-    if (accents.count(c)) {
-      c = accents[c];
-    }
-  }
-  return normalized;
-}
-
 // Select the best guess based on the feedback
 std::string selectBestGuess(const std::vector<std::string> &possibleWords,
                             bool isFirstGuess) {
   if (possibleWords.size() == 1) {
-    return possibleWords[0];  // Si queda una palabra, la seleccionamos.
+    return possibleWords[0];  // If
   }
 
+  // First guess: Prioritize words with most vowels
   if (isFirstGuess) {
-    // Seleccionar palabra inicial basada en la mayor cantidad de vocales
     std::string bestWord;
     size_t maxVowels = 0;
 
@@ -189,7 +192,7 @@ std::string selectBestGuess(const std::vector<std::string> &possibleWords,
     return bestWord;
   }
 
-  // Estrategia general: Priorizar letras frecuentes
+  // Subsequent guesses: Prioritize words with most frequent letters
   std::map<char, int> letterFrequency;
   for (const auto &word : possibleWords) {
     for (char c : word) {
@@ -222,8 +225,21 @@ std::string selectBestGuess(const std::vector<std::string> &possibleWords,
 // Function to play the game
 void playGame() {
   int wordLength;
-  std::cout << "Enter the word length: ";
-  std::cin >> wordLength;
+  while (true) {
+    std::cout << "Enter the word length: ";
+    std::cin >> wordLength;
+
+    if (std::cin.fail() || wordLength < 1) {
+      // clear the error flag
+      std::cin.clear();  
+      // discard invalid input
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cerr << "Invalid word length. Please enter a positive integer."
+                << std::endl;
+    } else {
+      break;
+    }
+  }
 
   std::vector<std::string> possibleWords = fetchWordsFromAPI(wordLength);
 

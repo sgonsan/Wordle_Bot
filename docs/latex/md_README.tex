@@ -1,2 +1,67 @@
-\chapter{README}
-\hypertarget{md_README}{}\label{md_README}\index{README@{README}}
+\chapter{Wordle Bot}
+\hypertarget{md_README}{}\label{md_README}\index{Wordle Bot@{Wordle Bot}}
+\label{md_README_autotoc_md0}%
+\Hypertarget{md_README_autotoc_md0}%
+
+
+This is a terminal-\/based bot that helps you play Wordle. It is written in c++ and uses a trie data structure to store the dictionary. The bot uses a simple algorithm to guess the word based on the feedback given by the user. In addition, there is two programs in python that can be used to generate the dictionary and launch the api server to play the game.\hypertarget{md_README_autotoc_md1}{}\doxysection{\texorpdfstring{How to use}{How to use}}\label{md_README_autotoc_md1}
+\hypertarget{md_README_autotoc_md2}{}\doxysubsection{\texorpdfstring{C++ bot}{C++ bot}}\label{md_README_autotoc_md2}
+To use the bot, you need to compile the source code. You can do this by running the following command\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{g++\ -\/o\ wordle\_bot\ code/main.cpp}
+
+\end{DoxyCode}
+
+
+Then, you can run the bot by executing the following command\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./wordle\_bot}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md3}{}\doxysubsection{\texorpdfstring{Python dictionary generator}{Python dictionary generator}}\label{md_README_autotoc_md3}
+To generate the dictionary, you need to run the following command\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{python3\ code/generate\_dictionary.py}
+
+\end{DoxyCode}
+
+
+This will generate two files\+: {\ttfamily dictionary.\+txt} and {\ttfamily dictionary.\+json}. The first file contains the list of words in the dictionary, and the second file contains the dictionary in json format.\hypertarget{md_README_autotoc_md4}{}\doxysubsection{\texorpdfstring{Python API server}{Python API server}}\label{md_README_autotoc_md4}
+To launch the api server, you need to run the following command\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{python3\ code/custom\_api.py}
+
+\end{DoxyCode}
+
+
+This will launch the api server on {\ttfamily \href{http://localhost:5000}{\texttt{ http\+://localhost\+:5000}}}. You can use this server to play the game using the bot.\hypertarget{md_README_autotoc_md5}{}\doxysection{\texorpdfstring{How to play}{How to play}}\label{md_README_autotoc_md5}
+To play the game, you need to provide the bot with the feedback for each guess. The feedback should be in the format {\ttfamily XXXXX}, where {\ttfamily X} is one of the following characters\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily B}\+: The letter is in the word and in the correct position.
+\item {\ttfamily C}\+: The letter is in the word but in the wrong position.
+\item {\ttfamily M}\+: The letter is not in the word.
+\end{DoxyItemize}
+
+For example, if the word is {\ttfamily apple} and the guess is {\ttfamily apple}, the feedback should be {\ttfamily BBBBB}. If the guess is {\ttfamily peach}, the feedback should be {\ttfamily BCMMM}.\hypertarget{md_README_autotoc_md6}{}\doxysection{\texorpdfstring{How it works}{How it works}}\label{md_README_autotoc_md6}
+The bot uses a simple algorithm to guess the word based on the feedback given by the user. The algorithm works as follows\+:
+
+
+\begin{DoxyEnumerate}
+\item The bot starts by guessing the word {\ttfamily apple}.
+\item The user provides feedback for the guess.
+\item The bot uses the feedback to eliminate words from the dictionary that do not match the feedback.
+\item The bot generates a new guess based on the remaining words in the dictionary.
+\item Steps 2-\/4 are repeated until the bot guesses the word.
+\end{DoxyEnumerate}
+
+The bot uses a trie data structure to store the dictionary. This allows the bot to efficiently search for words that match the feedback. 
