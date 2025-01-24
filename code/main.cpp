@@ -25,9 +25,10 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb,
 }
 
 // Function to fetch words from API
-std::vector<std::string> fetchWordsFromAPI(int wordLength) {
-  const std::string apiUrl =
-      "http://localhost:5000/words?length=" + std::to_string(wordLength);
+std::vector<std::string> fetchWordsFromAPI(int wordLength,
+                                           std::string language) {
+  const std::string apiUrl = "http://localhost:5000/words/" + language +
+                             "?length=" + std::to_string(wordLength);
   std::string response;
 
   CURL *curl;
@@ -56,6 +57,7 @@ std::vector<std::string> fetchWordsFromAPI(int wordLength) {
     words = jsonResponse.get<std::vector<std::string>>();
   } catch (const json::parse_error &e) {
     std::cerr << "Error parsing JSON response: " << e.what() << std::endl;
+    std::cerr << "Response: " << response << std::endl;
   }
 
   return words;
@@ -99,11 +101,11 @@ std::vector<std::string> filterWords(
 
     // First pass: check for correct letters in correct positions (B)
     for (size_t i = 0; i < normalizedWord.length(); ++i) {
-      if (feedback[i] == 'B' && normalizedWord[i] != guess[i]) {
+      if (feedback[i] == '*' && normalizedWord[i] != guess[i]) {
         match = false;
         break;
       }
-      if (feedback[i] == 'B') {
+      if (feedback[i] == '*') {
         used[i] = true;
       }
     }
@@ -111,7 +113,7 @@ std::vector<std::string> filterWords(
 
     // Second pass: check for correct letters in wrong positions (C)
     for (size_t i = 0; i < normalizedWord.length(); ++i) {
-      if (feedback[i] == 'C') {
+      if (feedback[i] == '+') {
         bool found = false;
         for (size_t j = 0; j < normalizedWord.length(); ++j) {
           if (!used[j] && normalizedWord[j] == guess[i] && i != j) {
@@ -130,7 +132,7 @@ std::vector<std::string> filterWords(
 
     // Third pass: check for incorrect letters (M)
     for (size_t i = 0; i < normalizedWord.length(); ++i) {
-      if (feedback[i] == 'M') {
+      if (feedback[i] == '-') {
         for (size_t j = 0; j < normalizedWord.length(); ++j) {
           if (normalizedWord[j] == guess[i] && !used[j]) {
             match = false;
@@ -155,9 +157,10 @@ bool validateFeedback(const std::string &feedback, int wordLength) {
   }
 
   for (char ch : feedback) {
-    if (ch != 'B' && ch != 'C' && ch != 'M') {
-      std::cerr << "Error: Feedback must only contain 'B', 'C', or 'M'."
-                << std::endl;
+    if (ch != '*' && ch != '+' && ch != '-') {
+      std::cerr
+          << "Error: Feedback must only contain '*', '+' or '-' characters."
+          << std::endl;
       return false;
     }
   }
@@ -225,13 +228,27 @@ std::string selectBestGuess(const std::vector<std::string> &possibleWords,
 // Function to play the game
 void playGame() {
   int wordLength;
+  std::string language;
+
+  while (true) {
+    std::cout << "Enter the language (en, es): ";  // fr, de, it
+    std::cin >> language;
+
+    if (language != "en" && language != "es") {
+      std::cerr << "Invalid language. Please enter one of: en, es."
+                << std::endl;
+    } else {
+      break;
+    }
+  }
+
   while (true) {
     std::cout << "Enter the word length: ";
     std::cin >> wordLength;
 
     if (std::cin.fail() || wordLength < 1) {
       // clear the error flag
-      std::cin.clear();  
+      std::cin.clear();
       // discard invalid input
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::cerr << "Invalid word length. Please enter a positive integer."
@@ -241,7 +258,8 @@ void playGame() {
     }
   }
 
-  std::vector<std::string> possibleWords = fetchWordsFromAPI(wordLength);
+  std::vector<std::string> possibleWords =
+      fetchWordsFromAPI(wordLength, language);
 
   if (possibleWords.empty()) {
     std::cerr << "No words of length " << wordLength
@@ -269,13 +287,9 @@ void playGame() {
     std::cout << "Bot guesses: " << guess << std::endl;
 
     std::cout
-        << "Enter feedback (B for correct, C for correct but wrong position, "
-           "M for incorrect): ";
+        << "Enter feedback (* for correct, + for correct but wrong position, "
+           "- for incorrect): ";
     std::cin >> feedback;
-
-    // Convert feedback to uppercase
-    std::transform(feedback.begin(), feedback.end(), feedback.begin(),
-                   ::toupper);
 
     if (!validateFeedback(feedback, wordLength)) {
       continue;
@@ -283,7 +297,7 @@ void playGame() {
 
     attempts++;
 
-    if (feedback == std::string(wordLength, 'B')) {
+    if (feedback == std::string(wordLength, '*')) {
       std::cout << "Bot solved the Wordle in " << attempts << " attempts!"
                 << std::endl;
       break;

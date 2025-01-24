@@ -5,35 +5,52 @@ app = Flask(__name__)
 
 # Cargar palabras desde un archivo
 # words_file_path = "/home/sgonsan/Projects/Wordle_Bot/data/spanish_words.txt"
-words_file_path = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary.txt"
-with open(words_file_path, "r", encoding="utf-8") as file:
-    words = [line.strip() for line in file.readlines()]
+files_path = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary"
+
+
+def load_words(languaje):
+    words = []
+    with open(files_path + "_" + languaje + ".txt", "r", encoding="utf-8") as file:
+        for line in file:
+            words.append(line.strip())
+    return words
 
 
 # Endpoint para obtener palabras por longitud
-@app.route("/words", methods=["GET"])
-def get_words():
+@app.route("/words/es", methods=["GET"])
+def get_words_es():
     length = request.args.get("length", type=int)
     if not length:
         return jsonify({"error": "Please provide a word length"}), 400
 
-    # Filtrar palabras por longitud
-    filtered_words = [word for word in words if len(word) == length]
+    words = load_words("es")
 
-    # Quitar las tildes de las palabras
-    filtered_words = [
-        word.replace("á", "a")
-        .replace("é", "e")
-        .replace("í", "i")
-        .replace("ó", "o")
-        .replace("ú", "u")
-        for word in filtered_words
-    ]
+    # Filter words by length
+    filtered_words = [word for word in words if len(word) == length]
 
     if not filtered_words:
         return jsonify({"error": "No words found"}), 404
 
-    # Devolver un subconjunto limitado para eficiencia
+    # Return words as JSON
+    return jsonify(filtered_words)
+
+
+# Endpoint para obtener palabras por longitud
+@app.route("/words/en", methods=["GET"])
+def get_words_en():
+    length = request.args.get("length", type=int)
+    if not length:
+        return jsonify({"error": "Please provide a word length"}), 400
+
+    words = load_words("en")
+
+    # Filter words by length
+    filtered_words = [word for word in words if len(word) == length]
+
+    if not filtered_words:
+        return jsonify({"error": "No words found"}), 404
+
+    # Return words as JSON
     return jsonify(filtered_words)
 
 
