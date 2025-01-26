@@ -1,0 +1,7 @@
+*.code-workspace
+.vscode/
+compile_and_execute.sh
+config
+Makefile
+Doxyfile
+venv/
