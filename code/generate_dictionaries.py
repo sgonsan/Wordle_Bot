@@ -6,10 +6,10 @@ import json
 # Configuración
 
 # Archivo de salida
-output_file = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary"
+output_file = "/home/sgonsan/Proyects/Wordle_Bot/data/dictionary"
 
 # Carpeta donde están los textos
-texts_folder = "/home/sgonsan/Projects/Wordle_Bot/texts"
+texts_folder = "/home/sgonsan/Proyects/Wordle_Bot/texts"
 
 
 # Función para limpiar y normalizar texto

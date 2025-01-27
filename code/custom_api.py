@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Cargar palabras desde un archivo
 # words_file_path = "/home/sgonsan/Projects/Wordle_Bot/data/spanish_words.txt"
-files_path = "/home/sgonsan/Projects/Wordle_Bot/data/dictionary"
+files_path = "/home/sgonsan/Proyects/Wordle_Bot/data/dictionary"
 
 
 def load_words(languaje):
