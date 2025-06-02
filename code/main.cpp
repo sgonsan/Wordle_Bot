@@ -65,13 +65,12 @@ std::vector<std::string> fetchWordsFromAPI(int wordLength,
 
 // Remove accents from a word
 std::string removeAccents(const std::string &word) {
-  std::unordered_map<char, char> accents = {
-      {'á', 'a'}, {'é', 'e'}, {'í', 'i'}, {'ó', 'o'}, {'ú', 'u'}, {'Á', 'A'},
-      {'É', 'E'}, {'Í', 'I'}, {'Ó', 'O'}, {'Ú', 'U'}, {'ü', 'u'}, {'Ü', 'U'}};
+  std::set<int> accents = {'á', 'é', 'í', 'ó', 'ú', 'ñ', 'ü',
+                           'Á', 'É', 'Í', 'Ó', 'Ú', 'Ñ', 'Ü'};
   std::string result = word;
   for (char ch : word) {
     if (accents.find(ch) != accents.end()) {
-      result = result.replace(result.find(ch), 1, 1, accents[ch]);
+      result = result.erase(result.find(ch), 1);
     }
   }
   return result;
@@ -228,7 +227,7 @@ std::string selectBestGuess(const std::vector<std::string> &possibleWords,
 // Function to play the game
 void playGame() {
   int wordLength;
-  std::string language;
+  std::string language, wordLengthStr;
 
   while (true) {
     std::cout << "Enter the language (en, es): ";  // fr, de, it
@@ -244,22 +243,31 @@ void playGame() {
 
   while (true) {
     std::cout << "Enter the word length: ";
-    std::cin >> wordLength;
+    std::cin >> wordLengthStr;
 
-    if (std::cin.fail() || wordLength < 1) {
-      // clear the error flag
-      std::cin.clear();
-      // discard invalid input
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::cerr << "Invalid word length. Please enter a positive integer."
+    try {
+      wordLength = std::stoi(wordLengthStr);
+      if (wordLength <= 0) {
+        throw std::invalid_argument("Word length must be a positive integer.");
+      }
+    } catch (const std::invalid_argument &e) {
+      std::cerr << "Invalid input. Please enter a valid positive integer."
                 << std::endl;
-    } else {
-      break;
+      continue;
+    } catch (const std::out_of_range &e) {
+      std::cerr << "Word length is out of range. Please enter a smaller number."
+                << std::endl;
+      continue;
     }
+    break;
   }
 
   std::vector<std::string> possibleWords =
       fetchWordsFromAPI(wordLength, language);
+
+  for (auto &word : possibleWords) {
+    word = removeAccents(word);  // Normalize words by removing accents
+  }
 
   if (possibleWords.empty()) {
     std::cerr << "No words of length " << wordLength

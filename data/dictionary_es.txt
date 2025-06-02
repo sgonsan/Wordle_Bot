@@ -39,9 +39,9 @@ pez
 mientras
 conjugaciones
 cuando
+yo
 le
 pasado
-yo
 era
 encontró
 estaba
@@ -60,8 +60,8 @@ donde
 voz
 antes
 te
-ella
 historia
+ella
 sino
 día
 mercado
@@ -75,12 +75,12 @@ dijo
 él
 ser
 verbos
+presente
 siempre
 decía
 biblioteca
 me
 nuevo
-presente
 pronombres
 respondió
 daniela
@@ -183,11 +183,11 @@ esto
 natural
 bosque
 según
+otra
 joven
 uno
 cofre
 aún
-otra
 misma
 nos
 secretos
@@ -200,6 +200,7 @@ oscuro
 destino
 dorada
 central
+silla
 puesto
 depende
 primero
@@ -237,7 +238,6 @@ paraguas
 primer
 pueblo
 realidad
-silla
 tiburón
 variedad
 vuelta
@@ -262,13 +262,14 @@ también
 mayor
 estas
 viento
+agua
 tiempos
 letras
+aire
 clave
 está
-agua
 mismo
-aire
+suelo
 extraño
 mano
 esa
@@ -277,7 +278,6 @@ hecho
 embargo
 formas
 brillante
-suelo
 repente
 ver
 cualquiera
@@ -499,24 +499,27 @@ diccionario
 frecuencia
 torre
 real
-vecinos
 manera
+vecinos
 sombras
 hay
 tanto
+casa
 tiene
 cuenta
 máquina
 tienen
-casa
+número
 cuetos
 han
 hacer
 ha
 frío
+mesa
+tierra
 alta
+oro
 alameda
-número
 poco
 tener
 les
@@ -527,15 +530,14 @@ existe
 versión
 explorar
 abrió
-mesa
 centro
 girar
 alrededor
 llena
-tierra
 bajo
-oro
+habitación
 remolino
+construcción
 ángel
 contar
 posible
@@ -564,9 +566,12 @@ copa
 nombre
 perfectamente
 salió
-habitación
 cabeza
 momento
+negro
+espectáculo
+arte
+música
 decisión
 similar
 manipular
@@ -585,7 +590,6 @@ visto
 errores
 buena
 estar
-construcción
 pasar
 diversas
 título
@@ -658,7 +662,6 @@ armonía
 arrastrado
 arreglar
 arrogante
-arte
 aspecto
 astuto
 aterrador
@@ -749,7 +752,6 @@ escucha
 esfuerzo
 espacio
 espectro
-espectáculo
 específico
 esperar
 esposa
@@ -823,12 +825,10 @@ misterioso
 mujer
 musgo
 máximo
-música
 nada
 nariz
 narrador
 natación
-negro
 niña
 notar
 noticia
@@ -1346,6 +1346,7 @@ sólo
 final
 f
 llave
+estudio
 española
 léxica
 word
@@ -1355,9 +1356,9 @@ c
 anexo
 r
 mara
+universidad
 vega
 tres
-estudio
 español
 caso
 academia
@@ -1367,7 +1368,6 @@ uso
 además
 elena
 psicología
-universidad
 neighbourhood
 recognition
 lexical
@@ -1379,6 +1379,9 @@ d
 lemas
 cálculo
 i
+entrada
+departamento
+información
 estudios
 efecto
 respuesta
@@ -1393,14 +1396,15 @@ tabla
 verbal
 he
 objetivo
-entrada
+puerta
+metal
 completamente
 veces
 densidad
 río
+dibujo
 azul
 pérez
-departamento
 oviedo
 lectura
 formato
@@ -1418,7 +1422,6 @@ familiaridad
 familiares
 buen
 obviamente
-información
 sujetos
 variable
 mediante
@@ -1449,8 +1452,8 @@ k
 perception
 madrid
 interesante
+clase
 llegar
-puerta
 salón
 escritas
 mira
@@ -1459,9 +1462,10 @@ luzca
 piedra
 nieve
 significado
+escalera
+piso
 pasadizo
 perla
-metal
 mayores
 exageración
 contexto
@@ -1472,12 +1476,17 @@ misterio
 superficie
 lámpara
 gato
-dibujo
 ojo
 barco
 ajustada
 torno
 papel
+mágico
+san
+cama
+artículo
+formación
+investigación
 josé
 murcia
 presenta
@@ -1556,7 +1565,6 @@ imponente
 hecha
 absorber
 mañana
-clase
 cruzaba
 puente
 capa
@@ -1568,9 +1576,7 @@ mármol
 salir
 normal
 cargar
-escalera
 caracol
-piso
 enorme
 leve
 zumbido
@@ -1626,12 +1632,67 @@ importantes
 cortas
 trama
 conexión
-mágico
 integran
 repetir
 exceso
 fluido
 lógico
+hola
+niño
+piña
+monda
+sopas
+mondongo
+eñe
+méxico
+exponente
+sur
+maestro
+blanco
+fácil
+difícil
+muchacho
+calor
+hielo
+vapor
+fuego
+gas
+atmósfera
+metálico
+hierro
+plata
+plomo
+sal
+barro
+escritorio
+dormitorio
+cuarto
+oficina
+panel
+ventana
+hogar
+apartamento
+edificio
+elevador
+ascensor
+cultura
+autor
+actuación
+espectador
+entretenimiento
+cine
+pintura
+religión
+dios
+educación
+escuela
+instituto
+colegio
+curso
+análisis
+conocimiento
+idea
+dato
 miguel
 ramón
 social
@@ -1752,7 +1813,6 @@ difieren
 demás
 masa
 cosa
-cama
 consiguiente
 programa
 dos
@@ -1789,7 +1849,6 @@ querido
 totales
 método
 atendiendo
-investigación
 habitual
 nulo
 punto
@@ -1800,7 +1859,6 @@ omisión
 recoge
 serie
 locuciones
-artículo
 tientas
 tienta
 espinos
@@ -1852,7 +1910,6 @@ agaragar
 pingpong
 cricri
 seis
-formación
 seleccionadas
 muestra
 intervalo
@@ -2111,7 +2168,6 @@ rubicón
 rusia
 sagitario
 salamanca
-san
 sancho
 santiago
 saturno
@@ -2224,6 +2280,9 @@ recurrentes
 actúa
 basado
 pasamos
+eche
+peo
+champeta
 fernando
 ciencias
 huelva
@@ -3964,7 +4023,6 @@ acto
 actor
 actora
 actriz
-actuación
 actuado
 actual
 actualidad
@@ -8903,7 +8961,6 @@ anzolero
 anzuelo
 anádromo
 anáfora
-análisis
 análogamente
 análogo
 anárquico
@@ -9052,7 +9109,6 @@ apartadijo
 apartadizo
 apartado
 apartador
-apartamento
 apartamiento
 apartar
 aparte
@@ -10774,7 +10830,6 @@ ascensional
 ascensionista
 ascensión
 ascenso
-ascensor
 ascensorista
 ascesis
 asceta
@@ -11467,7 +11522,6 @@ atlántico
 atlético
 atmosfera
 atmosférico
-atmósfera
 atoar
 atoba
 atobar
@@ -11870,7 +11924,6 @@ autoplastia
 autopropulsado
 autopropulsión
 autopsia
-autor
 autoridad
 autoritario
 autoritarismo
@@ -13368,7 +13421,6 @@ barrista
 barritar
 barrito
 barrizal
-barro
 barrocho
 barroco
 barroquismo
@@ -14391,7 +14443,6 @@ blancal
 blancarte
 blancazo
 blanchete
-blanco
 blancor
 blancote
 blancura
@@ -16772,7 +16823,6 @@ calonche
 calonge
 calongía
 caloniar
-calor
 caloriamperímetro
 caloricidad
 calorificación
@@ -21675,7 +21725,6 @@ cincuentén
 cincuentín
 cincuentón
 cincuesma
-cine
 cineasta
 cineclub
 cinefilia
@@ -22678,7 +22727,6 @@ colegialmente
 colegiar
 colegiata
 colegiatura
-colegio
 colegir
 colegislador
 colemia
@@ -23957,7 +24005,6 @@ conocedor
 conocencia
 conocible
 conocidamente
-conocimiento
 conoidal
 conoide
 conoideo
@@ -26200,7 +26247,6 @@ cuartillero
 cuartillo
 cuartilludo
 cuartizo
-cuarto
 cuartodecimano
 cuartogénito
 cuartucho
@@ -26545,7 +26591,6 @@ cultor
 cultoso
 cultrún
 cultual
-cultura
 cultural
 culturalista
 culturar
@@ -26726,7 +26771,6 @@ cursillista
 cursillo
 cursilón
 cursiva
-curso
 cursor
 cursómetro
 curtación
@@ -27170,7 +27214,6 @@ datilera
 datismo
 dativa
 dativo
-dato
 datura
 daturina
 dauco
@@ -31148,7 +31191,6 @@ difusivo
 difusión
 difuso
 difusor
-difícil
 difícilmente
 digamma
 digerible
@@ -31305,7 +31347,6 @@ dioptra
 dioptría
 diorama
 diorita
-dios
 diosa
 dioscoreáceo
 dioscóreo
@@ -32025,7 +32066,6 @@ dormirlas
 dormitación
 dormitar
 dormitivo
-dormitorio
 dormivela
 dormán
 dorna
@@ -32494,7 +32534,6 @@ edificante
 edificar
 edificativo
 edificatorio
-edificio
 edil
 edilicio
 edilidad
@@ -32509,7 +32548,6 @@ edrisí
 educable
 educacional
 educacionista
-educación
 educado
 educador
 educando
@@ -32805,7 +32843,6 @@ eleusino
 elevación
 elevadamente
 elevado
-elevador
 elevalunas
 elevamiento
 elevar
@@ -35515,7 +35552,6 @@ entretención
 entretenedor
 entretener
 entretenido
-entretenimiento
 entretiempo
 entretomar
 entreuntar
@@ -36586,7 +36622,6 @@ escriptura
 escrita
 escritilla
 escritor
-escritorio
 escritorista
 escriturar
 escriturario
@@ -36649,7 +36684,6 @@ escudriñador
 escudriñamiento
 escudriñar
 escudriño
-escuela
 escuerzo
 escuetamente
 escueto
@@ -37015,7 +37049,6 @@ especiota
 espectable
 espectacular
 espectacularidad
-espectador
 espectral
 espectrofotometría
 espectrofotómetro
@@ -38644,7 +38677,6 @@ expolición
 expolio
 exponedor
 exponencial
-exponente
 exponer
 exportable
 exportación
@@ -38845,7 +38877,6 @@ eyectable
 eyectar
 eyector
 ezquerdear
-eñe
 eólico
 eón
 ébano
@@ -41111,7 +41142,6 @@ fuco
 fucsia
 fucsina
 fudre
-fuego
 fueguino
 fuel
 fuelgo
@@ -41363,7 +41393,6 @@ fuñingue
 fuñique
 fábrica
 fábula
-fácil
 fácilmente
 fáctico
 fácula
@@ -42064,7 +42093,6 @@ garzonía
 garzota
 garzón
 garúa
-gas
 gasa
 gasajado
 gasajar
@@ -44900,7 +44928,6 @@ hidróxido
 hidátide
 hiebre
 hiel
-hielo
 hieltro
 hiemal
 hiena
@@ -44922,7 +44949,6 @@ hieroglífico
 hieroscopia
 hierosolimitano
 hierra
-hierro
 hierático
 hieródulo
 higa
@@ -45288,7 +45314,6 @@ hociquear
 hockey
 hodierno
 hodómetro
-hogar
 hogareño
 hogaril
 hogaza
@@ -45315,7 +45340,6 @@ hojilla
 hojoso
 hojudo
 hojuela
-hola
 holanda
 holandeta
 holandilla
@@ -46033,7 +46057,6 @@ icástico
 icónico
 ida
 idalio
-idea
 ideación
 idealidad
 idealismo
@@ -47939,7 +47962,6 @@ institucionista
 institución
 instituidor
 instituir
-instituto
 institutor
 institutriz
 instridente
@@ -52119,7 +52141,6 @@ maestresala
 maestrescolía
 maestrescuela
 maestril
-maestro
 maestría
 mafia
 mafioso
@@ -54581,7 +54602,6 @@ metrónomo
 metrópoli
 metrópolis
 metáfora
-metálico
 metástasis
 metátesis
 metéoro
@@ -55454,7 +55474,6 @@ monarquía
 monasterial
 monasterio
 moncheta
-monda
 mondaderas
 mondadientes
 mondador
@@ -55468,7 +55487,6 @@ mondaria
 mondejo
 mondo
 mondonga
-mondongo
 mondonguero
 mondonguería
 mondonguil
@@ -56098,7 +56116,6 @@ muchachear
 muchachería
 muchachez
 muchachil
-muchacho
 muchedumbre
 muchedumbroso
 muchiguar
@@ -56630,7 +56647,6 @@ lópez
 mazagatos
 misiones
 morfeo
-méxico
 noé
 palencia
 paris
@@ -57393,7 +57409,6 @@ niñero
 niñería
 niñeta
 niñez
-niño
 nobelio
 nobiliario
 nobilísimamente
@@ -58190,7 +58205,6 @@ oficialmente
 oficialía
 oficiante
 oficiar
-oficina
 oficinal
 oficinesco
 oficinista
@@ -59643,7 +59657,6 @@ panecillo
 panegirista
 panegirizar
 panegírico
-panel
 panela
 panelero
 panenteísmo
@@ -62312,7 +62325,6 @@ pintor
 pintoresco
 pintoresquismo
 pintorrear
-pintura
 pinturero
 pinturería
 pintón
@@ -62632,7 +62644,6 @@ pizzicato
 pián
 piélago
 piérides
-piña
 piñal
 piñata
 piño
@@ -62775,7 +62786,6 @@ plastificado
 plastificar
 plastilina
 plastrón
-plata
 platabanda
 plataforma
 platal
@@ -62918,7 +62928,6 @@ plomear
 plomero
 plomería
 plomizo
-plomo
 plomoso
 plorar
 plumado
@@ -67861,7 +67870,6 @@ religionario
 religiosamente
 religiosidad
 religioso
-religión
 relimar
 relimpiar
 relimpio
@@ -70332,7 +70340,6 @@ sajumaya
 sajía
 sajón
 sake
-sal
 salabardear
 salabardo
 salabre
@@ -73883,7 +73890,6 @@ suputación
 suputar
 supérstite
 suquinay
-sur
 sura
 surada
 sural
@@ -79008,7 +79014,6 @@ vaniloquio
 vanistorio
 vano
 vanílocuo
-vapor
 vaporable
 vaporación
 vaporar
@@ -79403,7 +79408,6 @@ ventajosamente
 ventajoso
 ventalla
 ventalle
-ventana
 ventanaje
 ventanal
 ventanazo

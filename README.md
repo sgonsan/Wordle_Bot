@@ -33,7 +33,7 @@ This will generate two files: `dictionary.txt` and `dictionary.json`. The first 
 To launch the api server, you need to run the following command:
 
 ```bash
-python3 code/custom_api.py
+python3 code/server.py
 ```
 
 This will launch the api server on `http://localhost:5000`. You can use this server to play the game using the bot.
@@ -42,9 +42,9 @@ This will launch the api server on `http://localhost:5000`. You can use this ser
 
 To play the game, you need to provide the bot with the feedback for each guess. The feedback should be in the format `XXXXX`, where `X` is one of the following characters:
 
-- `B`: The letter is in the word and in the correct position.
-- `C`: The letter is in the word but in the wrong position.
-- `M`: The letter is not in the word.
+- `*`: The letter is in the word and in the correct position.
+- `+`: The letter is in the word but in the wrong position.
+- `-`: The letter is not in the word.
 
 For example, if the word is `apple` and the guess is `apple`, the feedback should be `BBBBB`. If the guess is `peach`, the feedback should be `BCMMM`.
 
