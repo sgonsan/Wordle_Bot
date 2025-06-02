@@ -46,7 +46,7 @@ To play the game, you need to provide the bot with the feedback for each guess. 
 - `+`: The letter is in the word but in the wrong position.
 - `-`: The letter is not in the word.
 
-For example, if the word is `apple` and the guess is `apple`, the feedback should be `BBBBB`. If the guess is `peach`, the feedback should be `BCMMM`.
+For example, if the word is `words` and the guess is `words`, the feedback should be `*****`. If the guess is `world`, the feedback should be `***-+`.
 
 ## How it works
 
