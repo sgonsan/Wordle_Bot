@@ -251,12 +251,13 @@ void playGame() {
         throw std::invalid_argument("Word length must be a positive integer.");
       }
     } catch (const std::invalid_argument &e) {
-      std::cerr << "Invalid input. Please enter a valid positive integer."
+      std::cerr << "Invalid input. Please enter a valid word length."
                 << std::endl;
       continue;
     } catch (const std::out_of_range &e) {
-      std::cerr << "Word length is out of range. Please enter a smaller number."
-                << std::endl;
+      std::cerr
+          << "Word length is out of range. Please enter a valid word length."
+          << std::endl;
       continue;
     }
     break;
